@@ -1,0 +1,68 @@
+<%- include('partials/header', { title: 'LifeLine | Blood connects us' }) %>
+<section class="wrap home-hero">
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="pulse-dot"></span> A COMMUNITY THAT CARES</div>
+    <h1>Your blood can be<br><span>someone's second chance.</span></h1>
+    <p class="hero-lead">When someone needs blood, finding help should be simple. Connect with local donors and blood banks, all in one place.</p>
+    <div class="hero-actions"><a class="button button-primary button-large" href="<%= currentUser ? '/donor/register' : '/signup' %>">Become a donor <span aria-hidden="true">→</span></a><a class="button button-outline button-large" href="/donors">Find a donor</a></div>
+    <p class="hero-note"><span>♥</span> Every donation can make a life-changing difference.</p>
+  </div>
+  <div class="hero-art" aria-label="LifeLine blood donation illustration">
+    <%- include('partials/visual', { kind: 'home' }) %>
+    <img class="hero-photo" src="/images/donation-hero.jpg" alt="A donor receiving care during a blood donation" width="1400" height="826" fetchpriority="high" decoding="async">
+    <div class="hero-photo-shade" aria-hidden="true"></div>
+    <span class="hero-photo-caption">YOUR ONE ACT CAN CHANGE A LIFE</span>
+    <a class="photo-credit" href="https://unsplash.com/license" target="_blank" rel="noopener noreferrer">Photo via Unsplash</a>
+    <div class="float-card float-card-top"><span class="float-icon">♥</span><span><strong>Give the gift of life</strong><small>Be there when it matters</small></span></div>
+    <div class="float-card float-card-bottom"><span class="online-dot"></span><span><strong><%= totalDonors %> available donors</strong><small>In the LifeLine network</small></span></div>
+  </div>
+</section>
+
+<section class="wrap stat-grid" aria-label="LifeLine network statistics">
+  <article class="stat-tile reveal"><span class="stat-icon">♥</span><div><strong data-counter="<%= totalDonors %>"><%= totalDonors %></strong><small>Available donors</small></div></article>
+  <article class="stat-tile reveal"><span class="stat-icon">✚</span><div><strong data-counter="<%= totalUnits %>"><%= totalUnits %></strong><small>Blood units in inventory</small></div></article>
+  <article class="stat-tile reveal"><span class="stat-icon">↗</span><div><strong data-counter="<%= totalRequests %>"><%= totalRequests %></strong><small>Requests received</small></div></article>
+</section>
+
+<section class="wrap section-block why-section">
+  <div class="section-heading"><div><span class="eyebrow">A CLEARER WAY TO CONNECT</span><h2>Why choose LifeLine?</h2><p>Thoughtful tools for donors, families and community health teams.</p></div></div>
+  <div class="why-grid">
+    <article class="why-card reveal"><span class="why-icon">⌕</span><span class="why-number">01</span><h3>Local connections</h3><p>Search available donors by blood group and city, and reach out directly to confirm details.</p><a href="/donors">Explore donor search <span aria-hidden="true">→</span></a></article>
+    <article class="why-card reveal"><span class="why-icon">✓</span><span class="why-number">02</span><h3>Clear, verified listings</h3><p>Find blood bank contact information that is marked verified by the LifeLine team.</p><a href="/blood-banks">Browse blood banks <span aria-hidden="true">→</span></a></article>
+    <article class="why-card reveal"><span class="why-icon">♡</span><span class="why-number">03</span><h3>Your profile, your choice</h3><p>Manage your donor availability and keep your requests and donation history together.</p><a href="/how-it-works">See how it works <span aria-hidden="true">→</span></a></article>
+  </div>
+</section>
+
+<section class="wrap section-block">
+  <div class="section-heading"><div><span class="eyebrow">KNOW WHAT'S AVAILABLE</span><h2>Blood inventory</h2><p>Check current stock by blood group.</p></div><a class="text-link" href="<%= currentUser ? '/request-blood' : '/login' %>">Request blood <span aria-hidden="true">→</span></a></div>
+  <div class="stock-grid">
+    <% inventory.forEach((item) => { const fill = Math.min(item.units * 5, 100); %>
+      <article class="stock-card"><div class="stock-card-top"><span class="blood-type"><%= item.bloodGroup %></span><span class="stock-pill <%= item.units < 10 ? 'stock-low' : 'stock-ready' %>"><%= item.units < 10 ? 'Low stock' : 'In stock' %></span></div><strong class="stock-count"><%= item.units %> <small>units</small></strong><div class="stock-track" role="progressbar" aria-label="<%= item.bloodGroup %> inventory" aria-valuenow="<%= fill %>" aria-valuemin="0" aria-valuemax="100"><span style="width:<%= fill %>%"></span></div></article>
+    <% }) %>
+  </div>
+  <p class="fine-print">Inventory figures should be confirmed directly with the blood bank before travel.</p>
+</section>
+
+<section class="wrap awareness-band reveal">
+  <div class="awareness-mark" aria-hidden="true">♥</div>
+  <div><span class="eyebrow">BLOOD DONATION AWARENESS</span><h2>One act of care can travel a long way.</h2><p>A whole blood donation may be separated into components for different patients. Whether donation is right for you depends on clinical screening and local medical guidance.</p><a href="/about">Learn about LifeLine's role <span aria-hidden="true">→</span></a></div>
+  <a class="button button-primary" href="/donor/register">Become a donor</a>
+</section>
+
+<section class="wrap section-block how-preview">
+  <div class="center-heading"><span class="eyebrow">SIMPLE STEPS. REAL IMPACT.</span><h2>How LifeLine works</h2><p>From finding a donor to reaching out, we make the first steps easier.</p></div>
+  <div class="steps-grid"><article class="step-card"><span>01</span><h3>Join the network</h3><p>Create an account and add your donor profile when you are ready to help.</p></article><article class="step-card"><span>02</span><h3>Find a connection</h3><p>Search available donors by blood group and city, or check inventory.</p></article><article class="step-card"><span>03</span><h3>Reach out directly</h3><p>Confirm availability and next steps directly with the donor or blood bank.</p></article></div>
+</section>
+
+<section class="wrap section-block voices-section">
+  <div class="center-heading"><span class="eyebrow">DESIGNED AROUND REAL NEEDS</span><h2>Every side of the journey matters.</h2><p>These illustrative perspectives describe common needs—not testimonials from actual LifeLine users.</p></div>
+  <div class="voices-grid">
+    <article class="voice-card reveal"><span class="voice-quote" aria-hidden="true">“</span><p>“I want to offer help when I’m available, without losing control of my contact preferences.”</p><div class="voice-person"><span class="voice-avatar">D</span><div><strong>Donor perspective</strong><small>Illustrative</small></div></div></article>
+    <article class="voice-card reveal"><span class="voice-quote" aria-hidden="true">“</span><p>“When time is important, I need clear next steps and a way to contact local support.”</p><div class="voice-person"><span class="voice-avatar">F</span><div><strong>Family perspective</strong><small>Illustrative</small></div></div></article>
+    <article class="voice-card reveal"><span class="voice-quote" aria-hidden="true">“</span><p>“A well-organized request helps our community understand what support is being sought.”</p><div class="voice-person"><span class="voice-avatar">C</span><div><strong>Community perspective</strong><small>Illustrative</small></div></div></article>
+  </div>
+</section>
+
+<section class="wrap cta-band"><div><span>BE SOMEONE'S REASON TO HOPE</span><h2>Ready to make a difference?</h2><p>Join a caring community that brings people together when it counts.</p></div><a class="button button-light button-large" href="/signup">Join LifeLine <span aria-hidden="true">→</span></a></section>
+<p class="wrap medical-note"><strong>Important:</strong> LifeLine is a coordination aid, not a medical service. Donor eligibility, blood availability and compatibility must be confirmed by qualified medical professionals.</p>
+<%- include('partials/footer') %>

@@ -1,0 +1,47 @@
+<%- include('partials/header', { title: 'User Dashboard | LifeLine' }) %>
+<div class="wrap dashboard-shell">
+  <aside class="dashboard-sidebar">
+    <div class="dashboard-user"><span class="dashboard-avatar"><%= (account?.fullName || currentUser.name).split(' ').map((part) => part[0]).slice(0,2).join('').toUpperCase() %></span><strong>Hello, <%= (account?.fullName || currentUser.name).split(' ')[0] %>!</strong><small><%= donor ? donor.bloodGroup + ' donor' : 'LifeLine member' %></small></div>
+    <nav class="dashboard-menu" aria-label="Dashboard navigation"><a class="active" href="#overview"><span>⌂</span> Dashboard</a><a href="#requests"><span>▤</span> My Requests</a><a href="#donations"><span>♥</span> Donation History</a><a href="/donor/register"><span>✎</span> Edit Profile</a><a href="/request-blood"><span>＋</span> Request Blood</a><form method="post" action="/logout" class="dashboard-logout"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button type="submit"><span>↪</span> Log out</button></form></nav>
+    <div class="sidebar-help"><strong>Need help?</strong><p>Our community is here for you.</p><a href="/contact">Contact LifeLine →</a></div>
+  </aside>
+  <div class="dashboard-content">
+    <section class="dashboard-heading" id="overview"><div><span class="eyebrow">YOUR LIFELINE</span><h1>Dashboard</h1><p>Here's your donation activity at a glance.</p></div><a class="button button-primary" href="/request-blood">＋ Request blood</a></section>
+    <figure class="dashboard-photo"><img src="/images/donor-network.jpg" alt="Healthcare equipment representing the support available to donors" loading="lazy" decoding="async"><figcaption>Your generosity keeps the community connected.</figcaption></figure>
+    <section class="dashboard-metrics"><article class="dashboard-metric"><span class="metric-icon">♥</span><div><strong><%= donations.length %></strong><small>Donations</small></div></article><article class="dashboard-metric"><span class="metric-icon">♡</span><div><strong><%= requests.length %></strong><small>Requests</small></div></article><article class="dashboard-metric"><span class="metric-icon metric-star">◷</span><div><strong><%= requests.filter((request) => request.status === 'Pending').length %></strong><small>Pending requests</small></div></article></section>
+    <section class="dashboard-card dashboard-notifications" aria-labelledby="notification-heading"><div class="card-heading"><div><span class="eyebrow">ACCOUNT UPDATES</span><h2 id="notification-heading">Your notifications</h2></div><span class="notification-count"><%= notifications.length %></span></div>
+      <% if (notifications.length) { %><div class="notification-list"><% notifications.forEach((notification) => { %><article class="notification-row"><span aria-hidden="true"><%= notification.icon %></span><div><strong><%= notification.title %></strong><p><%= notification.message %></p></div><% if (notification.href) { %><a class="text-link" href="<%= notification.href %>">View →</a><% } %></article><% }) %></div><% } else { %><p class="muted-copy">You're all caught up. New request updates and account reminders will appear here.</p><% } %>
+    </section>
+    <section class="dashboard-grid dashboard-summary">
+      <article class="dashboard-card"><div class="card-heading"><h2>Donor profile</h2><a class="text-link" href="/donor/register">Edit →</a></div>
+        <% if (donor) { %><div class="donor-summary"><span class="blood-type"><%= donor.bloodGroup %></span><div><h3><%= donor.city %></h3><p>Age <%= donor.age %> · <%= donor.available ? 'Available to donate' : 'Not currently available' %></p></div></div><% if (donor.lastDonationDate) { %><p class="muted-copy">Last donation: <%= new Date(donor.lastDonationDate).toLocaleDateString() %></p><% } %>
+        <% } else { %><p class="muted-copy">Your donor profile is not set up yet.</p><a class="button button-outline" href="/donor/register">Register as a donor</a><% } %>
+      </article>
+      <article class="dashboard-card"><div class="card-heading"><h2>Recent activity</h2></div>
+        <% if (donations.length) { %><div class="activity-row"><span class="activity-icon">♥</span><div><strong>Blood donation</strong><small><%= new Date(donations[0].donationDate).toLocaleDateString() %><%= donations[0].center ? ' · ' + donations[0].center : '' %></small></div><span class="status-pill status-fulfilled">Completed</span></div>
+        <% } else if (requests.length) { %><div class="activity-row"><span class="activity-icon">✚</span><div><strong>Blood request</strong><small><%= requests[0].bloodGroup %> · <%= requests[0].hospital %></small></div><span class="status-pill status-<%= requests[0].status.toLowerCase() %>"><%= requests[0].status %></span></div>
+        <% } else { %><p class="muted-copy">Your recent donations and requests will appear here.</p><a class="text-link" href="/donors">Explore donor network →</a><% } %>
+      </article>
+    </section>
+    <section class="dashboard-section" id="requests"><div class="section-heading"><div><span class="eyebrow">REQUEST TRACKING</span><h2>My requests</h2></div><a class="text-link" href="/request-blood">New request +</a></div>
+      <% if (requests.length) { %><div class="table-wrap"><table><thead><tr><th>Patient</th><th>Blood group</th><th>Units</th><th>Hospital</th><th>Urgency</th><th>Status</th><th>Action</th></tr></thead><tbody><% requests.forEach((request) => { %><tr><td><%= request.patientName %></td><td><strong class="red-text"><%= request.bloodGroup %></strong></td><td><%= request.units %></td><td><%= request.hospital %></td><td><%= request.urgency %></td><td><span class="status-pill status-<%= request.status.toLowerCase() %>"><%= request.status %></span></td><td><% if (request.status === 'Pending') { %><form method="post" action="/request-blood/<%= request._id %>/cancel" data-confirm="Cancel this blood request?"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-outline button-small">Cancel</button></form><% } else { %>—<% } %></td></tr><% }) %></tbody></table></div><% } else { %><div class="empty-state dashboard-empty"><span class="empty-drop">✚</span><div><h3>No requests yet</h3><p>When you submit a blood request, its status will show up here.</p></div><a class="button button-outline" href="/request-blood">Request blood</a></div><% } %>
+    </section>
+    <section class="dashboard-section" id="donations"><div class="section-heading"><div><span class="eyebrow">YOUR GIVING JOURNEY</span><h2>Donation history</h2><p>Record donations you have made to keep track of your journey.</p></div></div>
+      <div class="dashboard-grid donation-layout"><form class="form-card form-stack donation-form" method="post" action="/donations"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><label>Donation date<input type="date" name="donationDate" max="<%= new Date().toISOString().slice(0,10) %>" required></label><label>Donation center<input name="center" maxlength="150" placeholder="Hospital or blood bank"></label><label>Note (optional)<textarea name="notes" rows="2" maxlength="300" placeholder="Add a note"></textarea></label><button class="button button-primary">Add donation record</button></form>
+      <div class="donation-list"><% if (donations.length) { %><% donations.forEach((donation) => { %><article class="donation-item"><span class="donation-mark">♥</span><div><strong><%= new Date(donation.donationDate).toLocaleDateString() %></strong><p><%= donation.center || 'Donation center not specified' %></p><% if (donation.notes) { %><small><%= donation.notes %></small><% } %></div><span class="status-pill status-fulfilled">Completed</span></article><% }) %><% } else { %><div class="empty-state donation-empty"><span class="empty-drop">♥</span><div><h3>Your story starts here</h3><p>Add a donation above to keep a personal record.</p></div></div><% } %></div></div>
+    </section>
+    <section class="dashboard-section" id="account-privacy">
+      <div class="section-heading"><div><span class="eyebrow">ACCOUNT &amp; PRIVACY</span><h2>Deactivate account</h2><p>Submit a request to deactivate your account and stop public donor contact.</p></div></div>
+      <div class="dashboard-card">
+        <p class="muted-copy">This immediately disables sign-in and hides your donor profile. Existing account, request and donation records are retained for review; this action does not permanently delete data.</p>
+        <% if (currentUser?.role === 'admin') { %><p class="muted-copy">Administrator accounts cannot request deactivation while they are the last active administrator.</p><% } %>
+        <form class="form-stack" method="post" action="/account/deletion-request" data-confirm="Deactivate your account now? Your records will be retained and no data will be permanently deleted.">
+          <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
+          <label>Current password<input type="password" name="password" autocomplete="current-password" required></label>
+          <button class="button button-outline" type="submit">Request account deactivation</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+<%- include('partials/footer') %>

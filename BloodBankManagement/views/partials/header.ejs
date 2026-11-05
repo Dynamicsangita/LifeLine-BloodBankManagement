@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#b71934">
+  <title><%= typeof title === 'string' ? title : 'LifeLine | Blood connects us' %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="/css/style.css?v=12" rel="stylesheet">
+</head>
+<body>
+<header class="site-header">
+  <nav class="site-nav wrap" aria-label="Main navigation">
+    <a class="brand" href="/" aria-label="LifeLine home"><span class="brand-drop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5C9 6.7 5.5 10.1 5.5 15a6.5 6.5 0 0 0 13 0c0-4.9-3.5-8.3-6.5-12.5Z"/><path class="drop-plus" d="M11 11h2v3h3v2h-3v3h-2v-3H8v-2h3z"/></svg></span><span>LifeLine<small>Blood connects us</small></span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <div class="nav-content" id="primary-nav">
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <details class="nav-services"><summary>Services</summary><div class="services-menu"><a href="/donors">Find Donors</a><a href="/donor/register">Donor Registration</a><a href="/request-blood">Request Blood</a><a href="/emergency-match">Emergency Match</a><a href="/blood-banks">Blood Banks</a></div></details>
+        <a href="/how-it-works">How It Works</a><a href="/about">About Us</a><a href="/contact">Contact Us</a>
+        <% if (currentUser) { %><a href="/dashboard">Dashboard</a><% if (currentUser.role === 'admin') { %><a href="/admin">Admin</a><% } %><% } %>
+      </div>
+      <div class="nav-actions">
+        <% if (currentUser) { %>
+          <form method="post" action="/logout" class="inline-form"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-light button-small" type="submit">Log out</button></form>
+        <% } else { %>
+          <a class="nav-login" href="/login">Log in</a><a class="button button-light button-small donor-nav-cta" href="/signup"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5C9 6.7 5.5 10.1 5.5 15a6.5 6.5 0 0 0 13 0c0-4.9-3.5-8.3-6.5-12.5Z"/><path class="drop-plus" d="M11 11h2v3h3v2h-3v3h-2v-3H8v-2h3z"/></svg>Become a Donor</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+</header>
+<main class="page-main">
+  <% if (flashMessages && flashMessages.length) { %><div class="wrap flash-stack"><% flashMessages.forEach((item) => { %><div class="flash flash-<%= item.type %>" role="status"><%= item.message %></div><% }) %></div><% } %>

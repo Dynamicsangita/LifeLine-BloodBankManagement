@@ -1,0 +1,22 @@
+{% extends 'base.html' %}{% block title %}Dashboard | LifeLine{% endblock %}{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4"><div><span class="eyebrow">YOUR ACCOUNT</span><h1 class="section-title">Hello, {{ session.get('name') }} 👋</h1><p class="text-secondary">Your LifeLine activity at a glance.</p></div><a class="btn btn-danger" href="{{ url_for('request_blood') }}">+ Request Blood</a></div>
+<div class="row g-3 mb-4"><div class="col-md-6"><div class="dashboard-card"><h5>Donor profile</h5>{% if donor %}<p class="mb-1"><span class="blood-type small-type">{{ donor.blood_group }}</span> · {{ donor.city }}</p><p class="text-secondary">Status: {{ 'Available' if donor.available else 'Unavailable' }}</p><a href="{{ url_for('donor_register') }}" class="btn btn-outline-danger">Edit profile</a>{% else %}<p class="text-secondary">You have not registered as a donor yet.</p><a href="{{ url_for('donor_register') }}" class="btn btn-danger">Register as donor</a>{% endif %}</div></div>
+<div class="col-md-6"><div class="dashboard-card"><h5>Quick actions</h5><div class="d-flex flex-wrap gap-2"><a class="btn btn-outline-danger" href="{{ url_for('search_donors') }}">Find donors</a><a class="btn btn-outline-danger" href="{{ url_for('emergency_match') }}">Emergency match</a></div></div></div></div>
+<div class="dashboard-card"><h4 class="fw-bold mb-3">My blood requests</h4>{% if requests %}<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Patient</th><th>Group</th><th>Units</th><th>Hospital</th><th>Urgency</th><th>Status</th><th>Action</th></tr></thead><tbody>{% for r in requests %}<tr><td>{{ r.patient_name }}</td><td><strong class="text-danger">{{ r.blood_group }}</strong></td><td>{{ r.units }}</td><td>{{ r.hospital }}</td><td>{{ r.urgency }}</td><td><span class="badge text-bg-{{ 'success' if r.status=='Fulfilled' else 'warning' if r.status=='Pending' else 'danger' if r.status=='Rejected' else 'secondary' }}">{{ r.status }}</span></td><td>{% if r.status=='Pending' %}<form method="post" action="{{ url_for('cancel_blood_request', request_id=r.id) }}" onsubmit="return confirm('Cancel this blood request?')"><button class="btn btn-sm btn-outline-danger">Cancel</button></form>{% else %}<span class="text-secondary small">—</span>{% endif %}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="text-secondary mb-0">No requests submitted yet.</p>{% endif %}</div>
+<div class="dashboard-card mt-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h4 class="fw-bold mb-0">Verified blood banks</h4>
+    <a class="btn btn-sm btn-outline-danger" href="{{ url_for('blood_banks') }}">View directory</a>
+  </div>
+  {% if blood_banks %}
+    <div class="table-responsive"><table class="table align-middle mb-0">
+      <thead><tr><th>Blood bank</th><th>Address</th><th>City</th><th>Contact</th></tr></thead>
+      <tbody>{% for bank in blood_banks %}
+        <tr><td class="fw-semibold">{{ bank.name }}</td><td>{{ bank.address }}</td><td>{{ bank.city }}</td><td>{% if bank.phone %}<a href="tel:{{ bank.phone }}">{{ bank.phone }}</a>{% elif bank.email %}<a href="mailto:{{ bank.email }}">{{ bank.email }}</a>{% else %}<span class="text-secondary">Contact unavailable</span>{% endif %}</td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+  {% else %}
+    <p class="text-secondary mb-0">No verified blood-bank records are available yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

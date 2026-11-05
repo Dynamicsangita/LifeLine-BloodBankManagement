@@ -1,0 +1,68 @@
+<%- include('partials/header', { title: 'Admin dashboard | LifeLine' }) %>
+<section class="wrap admin-page-heading">
+  <img class="admin-heading-photo" src="/images/admin-team.jpg" alt="Medical professionals working together in a care environment" loading="lazy" decoding="async">
+  <div><span class="eyebrow">LIFELINE OPERATIONS</span><h1>Admin dashboard</h1><p>Live overview of donors, requests, inventory and community activity.</p></div>
+  <div class="admin-heading-actions"><a class="button button-outline button-small" href="/admin/reports/requests.csv">Download requests CSV</a><span class="admin-live-pill"><i></i> Connected to MongoDB</span></div>
+</section>
+<section class="wrap admin-metrics" aria-label="Platform overview">
+  <article class="admin-metric reveal"><span class="admin-metric-icon">♥</span><div><strong><%= donorCount %></strong><small>Registered donors</small></div><span class="admin-metric-foot">All profiles</span></article>
+  <article class="admin-metric reveal"><span class="admin-metric-icon">✚</span><div><strong><%= requestCount %></strong><small>Total requests</small></div><span class="admin-metric-foot">All time</span></article>
+  <article class="admin-metric reveal"><span class="admin-metric-icon admin-metric-warning">◷</span><div><strong><%= pendingRequestCount %></strong><small>Pending requests</small></div><span class="admin-metric-foot">Need review</span></article>
+  <article class="admin-metric reveal"><span class="admin-metric-icon admin-metric-success">✓</span><div><strong><%= fulfilledRequestCount %></strong><small>Completed requests</small></div><span class="admin-metric-foot">Fulfilled</span></article>
+</section>
+
+<section class="wrap admin-analytics">
+  <article class="admin-panel blood-analytics">
+    <div class="admin-panel-heading"><div><span class="eyebrow">DONOR NETWORK</span><h2>Donors by blood group</h2><p>Distribution of registered profiles. Select a group to find available donors.</p></div><span class="blood-group-total"><%= donorCount %> total</span></div>
+    <div class="blood-group-bars">
+      <% bloodGroupStats.forEach((item) => { const percent = donorCount ? Math.round((item.count / donorCount) * 100) : 0; %>
+        <a class="blood-group-row" href="/donors?bloodGroup=<%= encodeURIComponent(item.bloodGroup) %>" aria-label="Find available <%= item.bloodGroup %> donors; <%= item.count %> profiles registered"><div class="blood-group-label"><strong><%= item.bloodGroup %></strong><span><%= item.count %></span></div><div class="analytics-track" role="progressbar" aria-label="<%= item.bloodGroup %> donor profiles" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100"><span style="width:<%= percent %>%"></span></div></a>
+      <% }) %>
+    </div>
+  </article>
+  <article class="admin-panel inventory-panel">
+    <div class="admin-panel-heading"><div><span class="eyebrow">BLOOD AVAILABILITY</span><h2>Update inventory</h2><p>Aggregate stock is manually maintained and reduced only when an approved request is fulfilled.</p></div></div>
+    <form class="admin-inline-form" method="post" action="/admin/inventory"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><label>Blood group<select name="bloodGroup" required><% bloodGroups.forEach((group) => { %><option value="<%= group %>"><%= group %></option><% }) %></select></label><label>Units available<input type="number" name="units" min="0" max="100000" required></label><button class="button button-primary">Save inventory</button></form>
+    <div class="stock-grid admin-stock"><% inventory.forEach((item) => { %><article class="stock-card"><span class="blood-type"><%= item.bloodGroup %></span><strong class="stock-count"><%= item.units %> <small>units</small></strong></article><% }) %></div>
+  </article>
+</section>
+
+<section class="wrap admin-workspace">
+  <div class="admin-main-column">
+    <section class="admin-panel admin-list-panel">
+      <div class="admin-panel-heading"><div><span class="eyebrow">ACCOUNT PRIVACY</span><h2>Deactivation requests</h2><p>Accounts are already disabled. Marking a request reviewed does not delete any records.</p></div><span class="admin-list-count"><%= pendingDeletionRequests.length %></span></div>
+      <% if (pendingDeletionRequests.length) { %>
+        <div class="admin-donor-list"><% pendingDeletionRequests.forEach((account) => { %><article class="admin-donor-row"><div><strong><%= account.fullName %></strong><small><%= account.email %></small></div><time datetime="<%= new Date(account.deletionRequestedAt).toISOString() %>"><%= new Date(account.deletionRequestedAt).toLocaleDateString() %></time><form method="post" action="/admin/account/<%= account._id %>/deletion-request/review"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-small button-outline">Mark reviewed</button></form></article><% }) %></div>
+      <% } else { %><div class="admin-empty">No account deactivation requests are waiting for review.</div><% } %>
+    </section>
+    <section class="admin-panel admin-list-panel">
+      <div class="admin-panel-heading"><div><span class="eyebrow">RECENTLY JOINED</span><h2>Recent donor registrations</h2><p>Latest donor profiles recorded in the database.</p></div><span class="admin-list-count"><%= recentDonors.length %></span></div>
+      <% if (recentDonors.length) { %>
+        <div class="admin-donor-list"><% recentDonors.forEach((donor) => { %><article class="admin-donor-row"><span class="admin-donor-blood"><%= donor.bloodGroup %></span><div><strong><%= donor.fullName %></strong><small><%= donor.city %></small><small><%= donor.directoryConsentStatus === 'consented' ? donor.available ? 'Public listing enabled' : 'Public listing paused' : donor.directoryConsentStatus === 'withdrawn' ? 'Consent withdrawn' : 'Consent unverified · private' %></small></div><time datetime="<%= new Date(donor.createdAt).toISOString() %>"><%= new Date(donor.createdAt).toLocaleDateString() %></time></article><% }) %></div>
+      <% } else { %><div class="admin-empty">Donor registrations will appear here when people join LifeLine.</div><% } %>
+    </section>
+
+    <section class="admin-panel admin-list-panel">
+      <div class="admin-panel-heading"><div><span class="eyebrow">DIRECTORY REVIEW</span><h2>Pending blood bank listings</h2><p>Review facility details before publishing them in the verified directory.</p></div><span class="admin-list-count"><%= pendingBanks.length %></span></div>
+      <% if (pendingBanks.length) { %>
+        <div class="bank-review-list"><% pendingBanks.forEach((bank) => { %><article class="bank-review-card"><div><h3><%= bank.name %></h3><p><%= bank.address %>, <%= bank.city %></p><p><strong>Phone:</strong> <%= bank.phone || 'Not provided' %><% if (bank.email) { %> · <strong>Email:</strong> <%= bank.email %><% } %></p><p><strong>Hours:</strong> <%= bank.openingHours || 'Not provided' %></p><p><strong>Blood groups submitted:</strong> <%= bank.bloodGroups?.length ? bank.bloodGroups.join(', ') : 'None' %></p><small>Submitted <time datetime="<%= new Date(bank.createdAt).toISOString() %>"><%= new Date(bank.createdAt).toLocaleString() %></time></small></div><div class="action-row"><form method="post" action="/admin/blood-bank/<%= bank._id %>/verify"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-small button-success">Verify &amp; publish</button></form><form method="post" action="/admin/blood-bank/<%= bank._id %>/reject" data-confirm="Reject and remove this unverified blood bank submission?"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-small button-outline">Reject</button></form></div></article><% }) %></div>
+      <% } else { %><div class="admin-empty">No blood bank submissions are waiting for review.</div><% } %>
+    </section>
+
+    <section class="admin-panel admin-list-panel">
+      <div class="admin-panel-heading"><div><span class="eyebrow">REQUEST MANAGEMENT</span><h2>Blood requests</h2><p>Review and update request status.</p></div></div>
+      <% if (requests.length) { %><div class="table-wrap"><table><thead><tr><th>Patient / requester</th><th>Group</th><th>Units</th><th>Hospital / city</th><th>Urgency</th><th>Status</th><th>Action</th></tr></thead><tbody><% requests.forEach((request) => { %><tr><td><%= request.patientName %><small class="table-sub"><%= request.user?.fullName || 'Account removed' %></small></td><td><strong class="red-text"><%= request.bloodGroup %></strong></td><td><%= request.units %></td><td><%= request.hospital %><small class="table-sub"><%= request.city %> · <%= request.contactPhone %></small></td><td><%= request.urgency %></td><td><span class="status-pill status-<%= request.status.toLowerCase() %>"><%= request.status %></span></td><td><% if (request.status === 'Pending') { %><div class="action-row"><form method="post" action="/admin/request/<%= request._id %>/Approved"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-small button-success">Approve</button></form><form method="post" action="/admin/request/<%= request._id %>/Rejected"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-small button-outline">Reject</button></form></div><% } else if (request.status === 'Approved') { %><form method="post" action="/admin/request/<%= request._id %>/Fulfilled"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-small button-primary">Fulfill</button></form><% } else { %>—<% } %></td></tr><% }) %></tbody></table></div><% } else { %><div class="admin-empty">No blood requests have been submitted yet.</div><% } %>
+    </section>
+
+    <section class="admin-panel admin-list-panel">
+      <div class="admin-panel-heading"><div><span class="eyebrow">COMMUNITY SUPPORT</span><h2>Contact enquiries</h2><p>Follow up on messages sent through the contact form.</p></div></div>
+      <% if (messages.length) { %><div class="contact-admin-list"><% messages.forEach((message) => { %><article class="dashboard-card"><div class="card-heading"><h3><%= message.subject %></h3><span class="status-pill status-<%= message.status.toLowerCase() %>"><%= message.status %></span></div><p><strong><%= message.name %></strong> · <a href="mailto:<%= message.email %>"><%= message.email %></a></p><p><%= message.message %></p><% if (message.status === 'New') { %><form method="post" action="/admin/contact/<%= message._id %>/Reviewed"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-small button-outline">Mark reviewed</button></form><% } else if (message.status === 'Reviewed') { %><form method="post" action="/admin/contact/<%= message._id %>/Closed"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><button class="button button-small button-outline">Close enquiry</button></form><% } %></article><% }) %></div><% } else { %><div class="admin-empty">Contact enquiries will appear here when received.</div><% } %>
+    </section>
+  </div>
+
+  <aside class="admin-panel activity-panel">
+    <div class="admin-panel-heading"><div><span class="eyebrow">LIVE FEED</span><h2>Recent activity</h2><p>Latest recorded platform updates.</p></div></div>
+    <% if (recentActivity.length) { %><div class="activity-feed"><% recentActivity.forEach((activity) => { %><article class="activity-feed-row"><span class="activity-feed-icon activity-feed-<%= activity.type %>"><%= activity.type === 'donor' ? '♥' : activity.type === 'request' ? '✚' : '✉' %></span><div><strong><%= activity.title %></strong><p><%= activity.detail %></p><time datetime="<%= new Date(activity.createdAt).toISOString() %>"><%= new Date(activity.createdAt).toLocaleString() %></time></div></article><% }) %></div><% } else { %><div class="admin-empty">New donor, request and enquiry activity will appear here.</div><% } %>
+  </aside>
+</section>
+<%- include('partials/footer') %>

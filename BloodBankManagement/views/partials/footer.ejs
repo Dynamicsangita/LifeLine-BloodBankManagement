@@ -1,0 +1,28 @@
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-callout">
+    <img class="footer-callout-photo" src="<%= typeof donorRegistrationPage !== 'undefined' && donorRegistrationPage ? '/images/blood-donor-center.jpg' : '/images/donor-registration.jpg' %>" alt="<%= typeof donorRegistrationPage !== 'undefined' && donorRegistrationPage ? 'A donor seated at a blood drive while a medical worker assists' : 'A donor giving blood with professional medical support' %>" loading="lazy" decoding="async">
+    <div><span class="eyebrow">JOIN YOUR LOCAL DONOR NETWORK</span><h2>Be there for someone when it matters.</h2><p>Register as a blood donor and let people in your area reach out when you're available.</p></div>
+    <a class="button button-light" href="<%= currentUser ? '/donor/register' : '/signup' %>">Register as a donor <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="wrap footer-main">
+    <div class="footer-brand-column">
+      <a class="brand footer-brand" href="/"><span class="brand-drop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5C9 6.7 5.5 10.1 5.5 15a6.5 6.5 0 0 0 13 0c0-4.9-3.5-8.3-6.5-12.5Z"/><path class="drop-plus" d="M11 11h2v3h3v2h-3v3h-2v-3H8v-2h3z"/></svg></span><span>LifeLine<small>Blood connects us</small></span></a>
+      <p>Bringing donors, blood banks and people together when it matters.</p>
+      <a class="footer-email" href="/contact"><span aria-hidden="true">✉</span> Get in touch with our team</a>
+    </div>
+    <nav class="footer-column" aria-label="Explore LifeLine">
+      <h2>Explore</h2><a href="/about">About Us</a><a href="/how-it-works">How It Works</a><a href="/contact">Contact Us</a>
+    </nav>
+    <nav class="footer-column" aria-label="LifeLine services">
+      <h2>Services</h2><a href="/donors">Find Donors</a><a href="/emergency-match">Emergency Match</a><a href="/blood-banks">Blood Banks</a>
+    </nav>
+    <div class="footer-column footer-support">
+      <h2>Here to help</h2><p>Need blood? Connect with a local donor or contact a blood bank directly to confirm availability.</p><a class="footer-support-link" href="/request-blood">Request blood <span aria-hidden="true">→</span></a><a href="/privacy">Privacy policy</a><a href="/terms">Terms &amp; conditions</a>
+    </div>
+  </div>
+  <div class="footer-note"><div class="wrap footer-note-inner"><span>© <%= currentYear %> LifeLine · Made with care for the community</span><span>For coordination only. Always follow qualified medical advice.</span><a href="/about">Our role and responsibility</a></div></div>
+</footer>
+<script src="/js/script.js?v=7" defer></script>
+</body>
+</html>

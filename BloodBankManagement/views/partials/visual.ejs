@@ -1,0 +1,69 @@
+<div class="page-art page-art-<%= kind %>" aria-hidden="true">
+  <span class="art-spark art-spark-one">+</span><span class="art-spark art-spark-two">♥</span>
+  <div class="art-halo"></div>
+  <svg class="art-illustration" viewBox="0 0 280 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <% if (kind === 'heart') { %>
+      <path d="M140 183S62 137 62 91c0-43 53-52 78-18 25-34 78-25 78 18 0 46-78 92-78 92z" fill="#E72A48"/>
+      <path d="M76 113h36l13-21 17 45 17-62 15 38h30" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M54 193c19-19 42-19 64-9l22 10 34-8c11-2 17 11 6 18l-44 24c-18 10-40 10-58 1l-24-12z" fill="#F3B1A2"/>
+    <% } else if (kind === 'bag') { %>
+      <path d="M176 27h39v18h-39z" rx="5" fill="#D9DDE9"/><path d="M185 45v16h20V45" stroke="#71809B" stroke-width="7" stroke-linecap="round"/>
+      <rect x="126" y="58" width="104" height="145" rx="29" fill="url(#bagFill)" stroke="#B91E39" stroke-width="4"/><path d="M147 88h61v7h-61zM147 108h61v7h-61z" fill="#FFFFFF55"/>
+      <path d="M178 108v47M154 132h48" stroke="white" stroke-width="11" stroke-linecap="round"/>
+      <path d="M178 203v24" stroke="#4B2630" stroke-width="7" stroke-linecap="round"/><path d="M169 227h18" stroke="#4B2630" stroke-width="7" stroke-linecap="round"/>
+      <path d="M82 141c-12-14-35-5-34 13 1 17 34 36 34 36s33-19 34-36c1-18-22-27-34-13z" fill="#F0445C"/>
+    <% } else if (kind === 'siren') { %>
+      <path d="M111 166v-45c0-22 13-38 29-38s29 16 29 38v45" fill="url(#bagFill)"/><path d="M100 166h80v17h-80z" rx="8" fill="#303345"/><path d="M116 183h48v10h-48z" rx="5" fill="#4B5063"/>
+      <path d="M140 47V27M96 62 82 48M184 62l14-14M85 105H65M195 105h20" stroke="#E4314D" stroke-width="7" stroke-linecap="round"/>
+      <path d="M140 108v29" stroke="white" stroke-width="8" stroke-linecap="round"/><circle cx="140" cy="148" r="4" fill="white"/>
+      <path d="M74 194c12-12 25-12 37 0M169 194c12-12 25-12 37 0" stroke="#F28696" stroke-width="5" stroke-linecap="round"/>
+    <% } else if (kind === 'bank') { %>
+      <path d="M65 95 140 47l75 48" fill="#F7A3B0" stroke="#BA2039" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="70" y="96" width="140" height="105" rx="9" fill="#FFFFFF" stroke="#BCC9DE" stroke-width="5"/>
+      <path d="M91 110v72M124 110v72M157 110v72M190 110v72" stroke="#9BB5D5" stroke-width="12" stroke-linecap="round"/>
+      <path d="M127 75h26v26h-26z" fill="#DA2441"/><path d="M140 80v16M132 88h16" stroke="white" stroke-width="5" stroke-linecap="round"/>
+      <path d="M52 202h176" stroke="#7285A4" stroke-width="8" stroke-linecap="round"/>
+    <% } else if (kind === 'steps') { %>
+      <path d="M46 190h56M112 190h56M178 190h56" stroke="#F28C9B" stroke-width="4" stroke-dasharray="6 8"/>
+      <circle cx="73" cy="91" r="26" fill="#F7C4CC"/><circle cx="140" cy="91" r="26" fill="#F7C4CC"/><circle cx="207" cy="91" r="26" fill="#F7C4CC"/>
+      <path d="M73 80c-12 0-19 9-19 20v33h38v-33c0-11-7-20-19-20zM140 76c-8 12-15 24-15 34a15 15 0 0 0 30 0c0-10-7-22-15-34z" fill="#D92341"/>
+      <path d="M196 100c-12-12-27 4 11 31 38-27 23-43 11-31l-11 10z" fill="#D92341"/>
+      <circle cx="73" cy="50" r="13" fill="#C91F3A"/><circle cx="140" cy="50" r="13" fill="#C91F3A"/><circle cx="207" cy="50" r="13" fill="#C91F3A"/>
+    <% } else if (kind === 'contact') { %>
+      <rect x="66" y="57" width="148" height="136" rx="17" fill="white" stroke="#F0B4BE" stroke-width="5"/>
+      <path d="m77 72 63 48 63-48" stroke="#D52A45" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M83 171h55M83 151h87" stroke="#E8B7BF" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="210" cy="62" r="22" fill="#F7C4CC"/><path d="M202 62h16M210 54v16" stroke="#C91F3A" stroke-width="5" stroke-linecap="round"/>
+    <% } else if (kind === 'dashboard') { %>
+      <rect x="53" y="55" width="174" height="145" rx="15" fill="white" stroke="#F0B4BE" stroke-width="5"/>
+      <path d="M53 82h174" stroke="#F0B4BE" stroke-width="5"/><circle cx="70" cy="69" r="4" fill="#D52A45"/><circle cx="84" cy="69" r="4" fill="#F3A0AD"/>
+      <rect x="70" y="100" width="58" height="45" rx="9" fill="#FFF0F2"/><rect x="142" y="100" width="68" height="45" rx="9" fill="#FFF0F2"/>
+      <path d="M91 111c-9-9-20 3 8 22 28-19 17-31 8-22l-8 7z" fill="#D92341"/>
+      <path d="M153 131h44M153 120h32" stroke="#E89AA8" stroke-width="6" stroke-linecap="round"/>
+      <rect x="70" y="158" width="140" height="24" rx="7" fill="#F9DDE2"/>
+    <% } else if (kind === 'donors') { %>
+      <rect x="49" y="67" width="182" height="129" rx="18" fill="white" stroke="#F3C4CC" stroke-width="5"/>
+      <circle cx="101" cy="112" r="25" fill="#F8CCD3"/><circle cx="101" cy="105" r="10" fill="#B96761"/><path d="M82 133c3-16 35-16 38 0" fill="#D9435A"/>
+      <circle cx="178" cy="112" r="25" fill="#F8CCD3"/><circle cx="178" cy="105" r="10" fill="#D19570"/><path d="M159 133c3-16 35-16 38 0" fill="#D9435A"/>
+      <path d="M75 155h53M152 155h53" stroke="#EAA8B3" stroke-width="7" stroke-linecap="round"/>
+      <path d="M217 186 241 210" stroke="#BD2039" stroke-width="9" stroke-linecap="round"/><circle cx="211" cy="180" r="17" fill="#F4B2BD" stroke="#BD2039" stroke-width="6"/>
+    <% } else if (kind === 'hands' || kind === 'drop-hand') { %>
+      <path d="M141 48c-22 28-39 49-39 71a39 39 0 0 0 78 0c0-22-17-43-39-71z" fill="url(#dropFill)"/>
+      <path d="M133 103h16M141 95v16" stroke="white" stroke-width="7" stroke-linecap="round"/>
+      <path d="M52 177c20-17 42-19 63-7l18 11 34-8c12-3 19 11 7 18l-44 21c-15 7-34 7-50 0l-28-13z" fill="#F3B1A2"/>
+      <path d="M228 177c-20-17-42-19-63-7l-18 11-34-8c-12-3-19 11-7 18l44 21c15 7 34 7 50 0l28-13z" fill="#F3B1A2"/>
+    <% } else if (kind === 'hands-heart') { %>
+      <path d="M140 48c-22 28-39 49-39 71a39 39 0 0 0 78 0c0-22-17-43-39-71z" fill="url(#dropFill)"/>
+      <path d="M134 104h12M140 98v12" stroke="white" stroke-width="6" stroke-linecap="round"/>
+      <path d="M44 145c13-13 28-14 40-3l29 31c12 13 9 31-4 40-9 7-21 7-31 0L45 184c-13-10-14-27-1-39zM236 145c-13-13-28-14-40-3l-29 31c-12 13-9 31 4 40 9 7 21 7 31 0l33-29c13-10 14-27 1-39z" fill="#F3B1A2"/>
+    <% } else { %>
+      <path d="M140 30c-31 40-55 71-55 100a55 55 0 0 0 110 0c0-29-24-60-55-100z" fill="url(#dropFill)"/>
+      <path d="M130 112c-13-13-30 4 10 34 40-30 23-47 10-34l-10 9z" fill="white"/>
+      <path d="M41 184h53l13-22 16 41 18-68 17 49h82" stroke="#BF2039" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <% } %>
+    <defs>
+      <linearGradient id="dropFill" x1="91" y1="30" x2="188" y2="158" gradientUnits="userSpaceOnUse"><stop stop-color="#FA657A"/><stop offset="1" stop-color="#BF1634"/></linearGradient>
+      <linearGradient id="bagFill" x1="126" y1="58" x2="230" y2="203" gradientUnits="userSpaceOnUse"><stop stop-color="#F35469"/><stop offset="1" stop-color="#BA1632"/></linearGradient>
+    </defs>
+  </svg>
+</div>

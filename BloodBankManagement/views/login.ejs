@@ -1,0 +1,6 @@
+<%- include('partials/header', { title: 'Log in | LifeLine' }) %>
+<section class="auth-layout"><div class="auth-card"><div class="auth-illustration"><img src="/images/login-care.jpg" alt="Doctor providing compassionate care to a patient" loading="lazy" decoding="async"><span>CARE CONNECTS US</span></div><div class="auth-card-inner"><span class="eyebrow">WELCOME BACK</span><h1>Welcome back!</h1><p>Log in to continue your LifeLine journey.</p>
+  <form method="post" action="/login" class="form-stack"><input type="hidden" name="csrfToken" value="<%= csrfToken %>"><label>Email address<input type="email" name="email" maxlength="120" autocomplete="email" required placeholder="you@example.com"></label><label>Password<input type="password" name="password" autocomplete="current-password" required placeholder="Your password"></label><div class="remember-row"><label class="remember-check"><input type="checkbox" name="remember"><span>Remember me</span></label><a href="mailto:support@lifeline.org?subject=Password%20help">Email support for password help</a></div><button class="button button-primary button-large">Log in</button></form>
+  <p class="auth-switch">Don't have an account? <a href="/signup">Sign up</a></p></div>
+</div></section>
+<%- include('partials/footer') %>

@@ -1,0 +1,33 @@
+<%- include('partials/header', { title: 'Donor Registration | LifeLine' }) %>
+<section class="wrap page-heading donor-page-heading">
+  <span class="eyebrow">DONOR REGISTRATION</span>
+  <h1>Be a hero. Donate blood.</h1>
+  <p>Register as a LifeLine donor and help people in your community find support when they need it.</p>
+</section>
+<div class="wrap form-with-art donor-form-layout">
+  <form class="form-card form-grid donor-form" method="post" action="/donor/register" enctype="multipart/form-data">
+    <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
+    <label>Full name<input name="fullName" maxlength="100" autocomplete="name" required value="<%= donor?.fullName || account?.fullName || '' %>" placeholder="Your full name"></label>
+    <label>Blood group<select name="bloodGroup" required><option value="">Select blood group</option><% bloodGroups.forEach((group) => { %><option value="<%= group %>" <%= donor?.bloodGroup === group ? 'selected' : '' %>><%= group %></option><% }) %></select></label>
+    <label>Phone number<input name="phone" maxlength="20" type="tel" autocomplete="tel" required value="<%= donor?.phone || account?.phone || '' %>" placeholder="Your contact number"></label>
+    <label>Location / city<input name="city" maxlength="100" required value="<%= donor?.city || '' %>" placeholder="Your city"></label>
+    <label>Age <small class="field-hint">Donors must be 18–65</small><input type="number" name="age" min="18" max="65" required value="<%= donor?.age ?? '' %>" placeholder="Your age"></label>
+    <label>Last donation date <small class="field-hint">Optional</small><input type="date" name="lastDonationDate" max="<%= new Date().toISOString().slice(0,10) %>" value="<%= donor?.lastDonationDate ? new Date(donor.lastDonationDate).toISOString().slice(0,10) : '' %>"></label>
+    <label class="form-span donor-photo-upload">Profile photo <small class="field-hint">Optional · JPEG, PNG, or WebP · up to 5 MB</small><input type="file" name="photo" accept="image/jpeg,image/png,image/webp"></label>
+    <% if (donor?.photoPath && donor.photoConsent) { %><img class="donor-photo-preview" src="<%= donor.photoPath %>" alt="Your current donor profile photo" loading="lazy" decoding="async"><% } %>
+    <% if (donor?.photoPath && !donor.photoConsent) { %><p class="form-span field-hint">Your existing photo is not shown publicly. Check below to explicitly consent to display it.</p><% } %>
+    <label class="checkbox-label form-span donor-photo-consent"><input type="checkbox" name="photoConsent" value="on" <%= donor?.photoPath && donor.photoConsent && donor.photoConsentStatus === 'consented' ? 'checked' : '' %>><span>I consent to show my uploaded photo on my public donor card. I can withdraw this consent by unchecking this box.</span></label>
+    <details class="form-optional form-span"><summary>Additional details (optional)</summary><div class="form-grid optional-grid"><label>Gender<select name="gender"><% ['Prefer not to say', 'Female', 'Male', 'Other'].forEach((value) => { %><option <%= donor?.gender === value ? 'selected' : '' %>><%= value %></option><% }) %></select></label><label>Area / address<input name="address" maxlength="255" value="<%= donor?.address || '' %>" placeholder="Locality"></label></div></details>
+    <% if (donor?.directoryConsentStatus === 'unknown') { %><p class="form-span field-hint">Your existing profile has no verifiable directory-consent record, so it remains private. Check below to opt in again.</p><% } %>
+    <label class="checkbox-label form-span"><input type="checkbox" name="directoryConsent" value="on" <%= donor?.directoryConsent && donor.directoryConsentStatus === 'consented' ? 'checked' : '' %> <%= currentUser ? '' : 'required' %>><span>I agree that my name, blood group, city and phone number may appear in public donor search and that people may contact me. If I withdraw consent, my public listing will be paused.</span></label>
+    <% if (currentUser) { %>
+      <label class="checkbox-label form-span"><input type="hidden" name="available" value="off"><input type="checkbox" name="available" value="on" <%= !donor || donor.available ? 'checked' : '' %>><span>I am currently available to be contacted as a donor</span></label>
+    <% } %>
+    <div class="form-span form-actions"><button class="button button-primary button-large"><%= currentUser ? 'Save donor profile' : 'Register as a donor' %></button><% if (currentUser) { %><a class="button button-outline" href="/dashboard">Back to dashboard</a><% } else { %><a class="donor-login-link" href="/login">Already have an account? Log in</a><% } %></div>
+  </form>
+  <aside class="donor-art-panel">
+    <img class="page-photo" src="/images/blood-donor-center.jpg" alt="A donor seated at a blood drive while a medical worker assists" loading="lazy" decoding="async">
+    <div class="donor-art-copy"><span class="eyebrow">EVERY DROP MATTERS</span><h2>Your one act can make a difference.</h2><p>Give someone in your community a reason to hope. Your availability can be changed anytime.</p><div class="donor-trust"><span>✓</span> You stay in control of your availability</div></div>
+  </aside>
+</div>
+<%- include('partials/footer', { donorRegistrationPage: true }) %>

@@ -1,0 +1,20 @@
+<%- include('partials/header', { title: 'Contact Us | LifeLine' }) %>
+<section class="wrap contact-heading"><span class="eyebrow">CONTACT LIFELINE</span><h1>We'd love to<br><span>hear from you.</span></h1><p>Questions about LifeLine or need help with your account? Send our team a message.</p></section>
+<section class="wrap contact-layout">
+  <aside class="contact-info-panel">
+    <div class="contact-art"><img src="/images/contact-support.jpg" alt="Two people speaking together in a care setting" loading="lazy" decoding="async"></div>
+    <h2>Let's connect</h2><p>We're here to help with questions about donor registration, blood requests and your account.</p>
+    <div class="contact-info-item"><span>✉</span><div><strong>Email us</strong><small>Use the contact form and we'll get back to you.</small></div></div>
+    <div class="contact-info-item"><span>♥</span><div><strong>Community support</strong><small>For medical emergencies, contact your hospital directly.</small></div></div>
+  </aside>
+  <form class="form-card form-stack contact-form" method="post" action="/contact">
+    <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
+    <span class="eyebrow">SEND A MESSAGE</span><h2>Contact us</h2>
+    <label>Your name<input name="name" maxlength="100" required autocomplete="name" placeholder="Your full name"></label>
+    <label>Your email<input type="email" name="email" maxlength="120" required autocomplete="email" placeholder="you@example.com"></label>
+    <label>Subject<input name="subject" maxlength="150" required placeholder="How can we help?"></label>
+    <label>Your message<textarea name="message" rows="5" maxlength="2000" required placeholder="Write your message here..."></textarea></label>
+    <button class="button button-primary button-large">Send message <span aria-hidden="true">→</span></button>
+  </form>
+</section>
+<%- include('partials/footer') %>

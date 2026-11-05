@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}LifeLine | Blood connects us{% endblock %}
+{% block content %}
+<section class="home-hero mb-5">
+  <div class="row g-0 align-items-stretch">
+    <div class="col-lg-7 home-hero-copy">
+      <div class="home-kicker"><span class="home-kicker-dot"></span> A COMMUNITY THAT CARES</div>
+      <h1>One donation.<br><span>Countless second chances.</span></h1>
+      <p class="home-hero-lead">When someone needs blood, finding help should be simple. Connect with local donors and blood banks, all in one place.</p>
+      <div class="d-flex flex-wrap gap-3 mt-4">
+        <a class="btn btn-danger btn-lg home-primary-btn" href="{{ url_for('register') }}">Become a donor <span aria-hidden="true">→</span></a>
+        <a class="btn btn-outline-dark btn-lg home-secondary-btn" href="{{ url_for('search_donors') }}">Find a donor</a>
+      </div>
+      <div class="home-trust-note"><span aria-hidden="true">♥</span> A little of your time can mean everything to someone else.</div>
+    </div>
+    <div class="col-lg-5 home-hero-visual">
+      <div class="home-orbit home-orbit-one"></div>
+      <div class="home-orbit home-orbit-two"></div>
+      <div class="home-drop-wrap"><div class="home-drop">+</div></div>
+      <div class="home-float-card home-float-top"><span class="home-float-icon">♥</span><span><strong>Give the gift of life</strong><small>Be there when it matters</small></span></div>
+      <div class="home-float-card home-float-bottom"><span class="home-live-dot"></span><span><strong>{{ total_donors }} donors</strong><small>Available in the network</small></span></div>
+      <div class="home-visual-caption">YOUR ONE ACT CAN CHANGE A LIFE</div>
+    </div>
+  </div>
+</section>
+
+<section class="home-stats row g-3 mb-5" aria-label="LifeLine network statistics">
+  <div class="col-6 col-lg-4"><div class="home-stat-card"><span class="home-stat-icon">01</span><div><strong>{{ total_donors }}</strong><span>Available donors</span></div></div></div>
+  <div class="col-6 col-lg-4"><div class="home-stat-card"><span class="home-stat-icon">02</span><div><strong>{{ total_units }}</strong><span>Blood units in inventory</span></div></div></div>
+  <div class="col-12 col-lg-4"><div class="home-stat-card"><span class="home-stat-icon">03</span><div><strong>24/7</strong><span>Search when it matters</span></div></div></div>
+</section>
+
+<section class="home-inventory-section mb-5">
+  <div class="home-section-heading">
+    <div><span class="eyebrow">KNOW WHAT'S AVAILABLE</span><h2 class="section-title">Blood inventory</h2><p class="text-secondary mb-0">Check current stock by blood group.</p></div>
+    <a class="home-text-link" href="{{ url_for('request_blood') if session.get('user_id') else url_for('login') }}">Request blood <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="row g-3 mt-2">
+    {% for item in inventory %}
+    <div class="col-6 col-md-3"><article class="home-stock-card">
+      <div class="d-flex justify-content-between align-items-center"><span class="blood-type">{{ item.blood_group }}</span><span class="home-stock-label {{ 'home-stock-low' if item.units < 10 else 'home-stock-ready' }}">{{ 'Low stock' if item.units < 10 else 'In stock' }}</span></div>
+      <div class="home-stock-count">{{ item.units }} <small>units</small></div>
+      <div class="progress home-stock-progress" role="progressbar" aria-label="{{ item.blood_group }} inventory" aria-valuenow="{{ [item.units*5,100]|min }}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar {{ 'bg-warning' if item.units < 10 else 'bg-danger' }}" style="width: {{ [item.units*5,100]|min }}%"></div></div>
+    </article></div>
+    {% else %}
+    <div class="col-12"><div class="empty-state">Inventory is not available right now. Please try again later.</div></div>
+    {% endfor %}
+  </div>
+  <p class="home-inventory-note">Inventory figures are provided by participating blood banks and should be confirmed directly before travel.</p>
+</section>
+
+<section class="home-how-section mb-5">
+  <div class="text-center mb-4"><span class="eyebrow">SIMPLE STEPS. REAL IMPACT.</span><h2 class="section-title">How LifeLine works</h2></div>
+  <div class="row g-3">
+    <div class="col-md-4"><article class="home-step-card"><span class="home-step-number">01</span><h3>Join the network</h3><p>Create an account and add your donor profile when you're ready to help.</p></article></div>
+    <div class="col-md-4"><article class="home-step-card"><span class="home-step-number">02</span><h3>Find a connection</h3><p>Search available donors by blood group and city, or check the inventory.</p></article></div>
+    <div class="col-md-4"><article class="home-step-card"><span class="home-step-number">03</span><h3>Reach out directly</h3><p>Contact the donor or blood bank to confirm availability and next steps.</p></article></div>
+  </div>
+</section>
+
+<section class="home-cta-band mb-4">
+  <div><span class="home-cta-kicker">BE SOMEONE'S REASON TO HOPE</span><h2>Ready to make a difference?</h2><p>Join a caring community that brings people together when it counts.</p></div>
+  <a href="{{ url_for('register') }}" class="btn btn-light btn-lg home-cta-button">Join LifeLine <span aria-hidden="true">→</span></a>
+</section>
+<p class="home-medical-note"><strong>Important:</strong> LifeLine is a coordination aid, not a medical service. Donor eligibility, blood availability and compatibility must be confirmed by qualified medical professionals.</p>
+{% endblock %}

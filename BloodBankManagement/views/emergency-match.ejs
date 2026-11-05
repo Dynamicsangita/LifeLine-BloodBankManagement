@@ -1,0 +1,22 @@
+<%- include('partials/header', { title: 'Emergency Match | LifeLine' }) %>
+<section class="wrap emergency-heading"><div><span class="eyebrow">QUICK DONOR SEARCH</span><h1>Emergency match</h1><p>Find registered donors whose blood group may be compatible with the selected recipient group.</p></div><span class="emergency-badge"><i></i> QUICK SEARCH</span></section>
+<section class="wrap emergency-panel">
+  <div class="emergency-form-side">
+    <div class="emergency-alert"><span>!</span><p><strong>In case of emergency, please provide details below for a quick match.</strong> Contact your hospital or blood bank directly too.</p></div>
+    <form class="emergency-form" method="get" action="/emergency-match">
+      <label>Recipient blood group<select name="bloodGroup" required><option value="">Select blood group</option><% bloodGroups.forEach((group) => { %><option value="<%= group %>" <%= selectedGroup === group ? 'selected' : '' %>><%= group %></option><% }) %></select></label>
+      <label>Location<input name="city" value="<%= city %>" maxlength="100" placeholder="Enter your location"></label>
+      <button class="button button-primary button-large">Find emergency donors</button>
+    </form>
+  </div>
+  <aside class="emergency-art emergency-photo"><img src="/images/emergency-care.jpg" alt="A prepared hospital room for urgent patient care" loading="lazy" decoding="async"><span>HELP WHEN IT MATTERS</span></aside>
+</section>
+<div class="wrap medical-warning"><strong>Medical guidance:</strong> This preliminary matching guide is not a clinical decision. Qualified medical staff must verify blood type, donor eligibility, screening and crossmatching before any transfusion.</div>
+<section class="wrap results-section">
+  <% if (selectedGroup) { %>
+    <div class="results-heading"><div><span class="eyebrow">PRELIMINARY COMPATIBILITY</span><h2><%= donors.length %> matching donor<%= donors.length === 1 ? '' : 's' %></h2><p>Potential donor groups: <strong><%= compatibleGroups.join(', ') %></strong></p></div><span class="blood-type"><%= selectedGroup %></span></div>
+    <% if (donors.length) { %><div class="donor-grid"><% donors.forEach((donor,index) => { const name = donor.fullName || donor.user?.fullName || 'LifeLine donor'; const phone = donor.phone || donor.user?.phone || ''; %><article class="donor-card"><div class="donor-card-top"><div class="donor-avatar donor-avatar-<%= index % 4 %>"><%= name.split(' ').map((part) => part[0]).slice(0,2).join('').toUpperCase() %></div><div class="donor-card-person"><h3><%= name %></h3><p><strong><%= donor.bloodGroup %></strong> · <%= donor.city %></p></div></div><div class="donor-card-foot"><span class="available-pill"><i></i> Available</span><a class="phone-link" href="tel:<%= phone %>"><%= phone %></a></div><p class="card-note">Confirm availability with the donor and compatibility with medical staff.</p></article><% }) %></div>
+    <% } else { %><div class="empty-state donor-empty"><span class="empty-drop">♥</span><h3>No matching donors found</h3><p>Try a nearby city, or contact a local blood bank immediately for urgent help.</p><a class="button button-primary" href="/blood-banks">Find blood banks</a></div><% } %>
+  <% } %>
+</section>
+<%- include('partials/footer') %>

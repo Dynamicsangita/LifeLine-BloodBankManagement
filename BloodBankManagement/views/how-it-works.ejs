@@ -1,0 +1,78 @@
+<%- include('partials/header', { title: 'How It Works | LifeLine' }) %>
+<section class="wrap how-heading"><span class="eyebrow">SIMPLE STEPS. REAL IMPACT.</span><h1>How it works</h1><p>Small steps can help connect a donor with someone who needs support.</p></section>
+<figure class="wrap how-hero-photo">
+  <img src="/images/blood-donation-banner.png" alt="A nurse assisting a smiling donor during blood donation" decoding="async">
+  <figcaption><span>CARE THAT CONNECTS US</span><strong>One donation can make a meaningful difference.</strong></figcaption>
+</figure>
+<section class="wrap how-steps">
+  <div class="how-connector" aria-hidden="true"></div>
+  <article class="how-step"><span class="how-number">1</span><img class="how-step-photo how-step-registration" src="/images/signup-donation-portrait.jpg" alt="A prospective donor speaking with a healthcare professional during a screening visit" loading="lazy" decoding="async"><h2>Register</h2><p>Create your LifeLine account and share your donor details when you are ready to help.</p></article>
+  <article class="how-step"><span class="how-number">2</span><img class="how-step-photo how-step-donation" src="/images/donation-hero.jpg" alt="A healthcare professional carefully assisting a blood donor" loading="lazy" decoding="async"><h2>Donate</h2><p>Connect with a local donor or blood bank and follow their guidance on next steps.</p></article>
+  <article class="how-step"><span class="how-number">3</span><img class="how-step-photo how-step-care" src="/images/about-care.jpg" alt="A healthcare professional caring for a patient" loading="lazy" decoding="async"><h2>Save lives</h2><p>Your generosity can help someone receive support when they need it most.</p></article>
+</section>
+<section class="wrap how-details">
+  <div class="how-details-art"><img src="/images/contact-support.jpg" alt="A healthcare worker speaking with a person receiving support" loading="lazy" decoding="async"></div>
+  <div class="how-detail-copy"><span class="eyebrow">YOUR LIFELINE JOURNEY</span><h2>Finding help, made clearer.</h2><ul class="check-list"><li><span>✓</span> Search available donors by blood group and location.</li><li><span>✓</span> Check verified blood bank contact information.</li><li><span>✓</span> Submit a request and track updates in your dashboard.</li><li><span>✓</span> Record your donations and manage your availability.</li></ul><a class="button button-primary" href="/signup">Join the community <span aria-hidden="true">→</span></a></div>
+</section>
+<section class="wrap how-section how-eligibility" id="donor-eligibility">
+  <div class="how-section-heading"><span class="eyebrow">DONOR ELIGIBILITY</span><h2>Who can donate blood?</h2><p>Donation services check each person's eligibility and explain the requirements before donation.</p></div>
+  <div class="how-eligibility-panel">
+    <div class="how-eligibility-copy"><h3>Eligibility is assessed for every donation.</h3><p>In general, a prospective donor should feel well and be able to complete the donation service's health assessment. Local rules can differ based on age, health, donation type and other factors.</p><ul class="how-bullet-list"><li>Answer the health questionnaire honestly.</li><li>Follow the donation service's guidance about preparation and timing.</li><li>Tell the screening professional about health concerns, medicines or recent changes.</li></ul><p class="how-medical-note">Only qualified donation or medical professionals can confirm whether you are eligible to donate.</p><a class="button button-primary" href="/donor/register">Become a Donor <span aria-hidden="true">→</span></a></div>
+    <figure class="how-section-photo how-eligibility-photo"><img src="/images/donor-registration.jpg" alt="A donor receiving attention from a healthcare professional" loading="lazy" decoding="async"><figcaption>Screening helps staff guide each donor safely.</figcaption></figure>
+  </div>
+</section>
+<section class="wrap how-section how-benefits" id="donation-benefits">
+  <div class="how-section-heading"><span class="eyebrow">WHY DONATE</span><h2>Blood donation benefits</h2><p>Voluntary donation is an important way to support patients and the care teams who look after them.</p></div>
+  <div class="how-benefits-layout">
+    <figure class="how-section-photo how-benefits-photo"><img src="/images/signup-donation-portrait.jpg" alt="A donor being supported by a healthcare professional" loading="lazy" decoding="async"><figcaption>Generosity, supported by professional care.</figcaption></figure>
+    <div class="how-benefit-grid">
+      <article class="how-benefit-card"><span class="how-benefit-icon" aria-hidden="true">♥</span><h3>Supports patient care</h3><p>Donated blood components are used by healthcare teams as part of patient treatment.</p></article>
+      <article class="how-benefit-card"><span class="how-benefit-icon" aria-hidden="true">⌂</span><h3>Strengthens community support</h3><p>Voluntary donors help hospitals and blood services maintain their local supply.</p></article>
+      <article class="how-benefit-card"><span class="how-benefit-icon" aria-hidden="true">✚</span><h3>Makes generosity practical</h3><p>A donation is a direct, coordinated way to offer help through an authorized collection service.</p></article>
+      <article class="how-benefit-card"><span class="how-benefit-icon" aria-hidden="true">◎</span><h3>Builds awareness</h3><p>Learning about donation encourages informed conversations about community health needs.</p></article>
+    </div>
+  </div>
+</section>
+<section class="wrap how-section how-blood-groups" id="blood-groups">
+  <div class="how-section-heading"><span class="eyebrow">BLOOD GROUP BASICS</span><h2>Blood groups explained</h2><p>Blood groups are commonly described using the ABO group and the Rh positive or negative marker.</p></div>
+  <div class="how-blood-grid"><% bloodGroups.forEach((group) => { %><button class="how-blood-card" type="button" data-blood-group="<%= group %>" data-compatible-groups="<%= (compatibleDonors[group] || []).join('|') %>" aria-pressed="false" aria-haspopup="dialog"><span class="how-blood-symbol" aria-hidden="true">●</span><strong><%= group %></strong><small>Blood group</small></button><% }) %></div>
+  <p class="how-medical-note how-compatibility-note">A listed blood group alone does not determine whether a transfusion is suitable. Qualified medical professionals must verify blood type, testing and compatibility for each patient.</p>
+  <div class="how-blood-modal" hidden aria-hidden="true">
+    <section class="how-blood-dialog" role="dialog" aria-modal="true" aria-labelledby="how-blood-dialog-title" aria-describedby="how-blood-dialog-explanation" tabindex="-1">
+      <button class="how-blood-close" type="button" aria-label="Close blood group information">&times;</button>
+      <span class="eyebrow">BLOOD GROUP BASICS</span>
+      <h3 id="how-blood-dialog-title"></h3>
+      <p class="how-blood-explanation" id="how-blood-dialog-explanation"></p>
+      <h4>Commonly compatible donor groups</h4>
+      <div class="how-blood-compatible-list" aria-live="polite"></div>
+      <p class="how-blood-modal-note">Educational reference for red blood cells only. A qualified medical professional must verify all testing and transfusion compatibility.</p>
+    </section>
+  </div>
+</section>
+<section class="wrap how-section how-process" id="donation-process">
+  <div class="how-section-heading"><span class="eyebrow">AT THE DONATION SERVICE</span><h2>Donation process</h2><p>The exact steps vary by donation service. Staff will explain what to expect at each stage.</p></div>
+  <div class="how-process-grid">
+    <article class="how-process-card"><span class="how-process-number">01</span><img src="/images/donor-registration.jpg" alt="A donor talking with healthcare staff" loading="lazy" decoding="async"><h3>Registration</h3><p>Share your details and complete the forms requested by the donation service.</p></article>
+    <article class="how-process-card"><span class="how-process-number">02</span><img src="/images/signup-blood-donation.jpg" alt="A healthcare professional preparing to assess a donor" loading="lazy" decoding="async"><h3>Health screening</h3><p>A trained professional reviews your questionnaire and checks whether donation can proceed.</p></article>
+    <article class="how-process-card"><span class="how-process-number">03</span><img src="/images/donation-hero.jpg" alt="A healthcare professional assisting during blood donation" loading="lazy" decoding="async"><h3>Donation</h3><p>If cleared, donation takes place with the collection team following its clinical procedures.</p></article>
+    <article class="how-process-card"><span class="how-process-number">04</span><img src="/images/about-care.jpg" alt="A healthcare professional supporting a patient" loading="lazy" decoding="async"><h3>Post-donation care</h3><p>Follow the team's instructions, take the recovery time offered and ask staff if you feel unwell.</p></article>
+  </div>
+</section>
+<section class="wrap how-section how-safety" id="donation-safety">
+  <div class="how-safety-copy"><span class="eyebrow">SAFETY COMES FIRST</span><h2>Donation safety and guidelines</h2><p>Blood donation should take place through an authorized service with trained staff. Follow their instructions before, during and after your visit.</p><div class="how-safety-points"><article><span aria-hidden="true">✓</span><div><h3>Health screening</h3><p>Answer screening questions accurately and let staff decide whether it is appropriate to proceed.</p></div></article><article><span aria-hidden="true">✓</span><div><h3>Hygiene and equipment</h3><p>Collection staff follow hygiene procedures and use sterile, single-use collection equipment.</p></div></article><article><span aria-hidden="true">✓</span><div><h3>Professional supervision</h3><p>Ask the donation team questions and tell them promptly if you feel unwell.</p></div></article><article><span aria-hidden="true">✓</span><div><h3>Aftercare</h3><p>Rest as advised and follow the service's post-donation guidance.</p></div></article></div></div>
+  <figure class="how-section-photo how-safety-photo"><img src="/images/blood-donor-center.jpg" alt="A healthcare professional assisting a blood donor at a donation center" loading="lazy" decoding="async"><figcaption>Donation staff guide donors throughout their visit.</figcaption></figure>
+</section>
+<section class="wrap how-section how-faq" id="donation-faq">
+  <div class="how-section-heading"><span class="eyebrow">GOOD TO KNOW</span><h2>Frequently asked questions</h2><p>For personal medical advice or local requirements, contact a qualified donation service.</p></div>
+  <div class="how-faq-list">
+    <details class="how-faq-item"><summary>Who can donate blood?</summary><p>Requirements vary by location and donation type. A donation service will review your health information and confirm your eligibility with a qualified professional.</p></details>
+    <details class="how-faq-item"><summary>How can I register as a donor?</summary><p>Create a LifeLine account and complete the donor registration form, or register directly with an authorized blood donation service.</p><a href="/donor/register">Open donor registration →</a></details>
+    <details class="how-faq-item"><summary>How can I find nearby blood donors?</summary><p>Use LifeLine's donor search to filter available registered donors by blood group and location. Confirm arrangements directly and contact a hospital for urgent needs.</p><a href="/donors">Search donors →</a></details>
+    <details class="how-faq-item"><summary>How often can someone donate blood?</summary><p>The interval depends on donation type, local rules and your individual circumstances. Follow the timing guidance given by the blood donation service.</p></details>
+    <details class="how-faq-item"><summary>Is blood donation safe?</summary><p>Donation services use screening and professional procedures to support donor safety. Staff will explain the process and aftercare; tell them if you have concerns or feel unwell.</p></details>
+    <details class="how-faq-item"><summary>How can I contact a blood bank?</summary><p>Browse LifeLine's directory for verified blood bank contact details, then call the listed service to confirm its current information and availability.</p><a href="/blood-banks">Find blood banks →</a></details>
+  </div>
+</section>
+<section class="wrap how-cta"><div><span class="eyebrow">READY TO HELP?</span><h2>Become a donor with LifeLine</h2><p>Register your details and manage your donor availability whenever you need to.</p></div><a class="button button-light" href="/donor/register">Become a Donor <span aria-hidden="true">→</span></a></section>
+<section class="wrap notice-card how-emergency"><div><strong>In an emergency</strong><p>Contact your hospital or local emergency services immediately. LifeLine is not an emergency medical service.</p></div><a class="button button-outline" href="/emergency-match">Open emergency match</a></section>
+<%- include('partials/footer') %>

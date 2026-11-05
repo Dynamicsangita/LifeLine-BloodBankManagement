@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% block title %}Create account | LifeLine{% endblock %}{% block content %}
+<div class="auth-wrap"><div class="auth-card"><div class="eyebrow">JOIN THE COMMUNITY</div><h2 class="fw-bold mb-2">Create your account</h2><p class="text-secondary mb-4">Be part of a network that saves lives.</p>
+<form method="post"><label class="form-label">Full name</label><input class="form-control mb-3" name="full_name" required maxlength="100" placeholder="Your full name">
+<label class="form-label">Email</label><input class="form-control mb-3" type="email" name="email" required placeholder="you@example.com">
+<label class="form-label">Phone number</label><input class="form-control mb-3" name="phone" required maxlength="20" placeholder="Contact number">
+<label class="form-label">Password <small class="text-secondary">(8+ characters)</small></label><input class="form-control mb-4" type="password" name="password" minlength="8" required placeholder="Create a strong password">
+<button class="btn btn-danger w-100 btn-lg">Create Account</button></form><p class="text-center mt-3 mb-0">Already registered? <a href="{{ url_for('login') }}" class="text-danger fw-semibold">Log in</a></p></div></div>{% endblock %}

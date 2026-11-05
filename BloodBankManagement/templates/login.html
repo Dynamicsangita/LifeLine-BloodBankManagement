@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block title %}Login | LifeLine{% endblock %}{% block content %}
+<div class="auth-wrap"><div class="auth-card"><div class="eyebrow">WELCOME BACK</div><h2 class="fw-bold mb-2">Log in to LifeLine</h2><p class="text-secondary mb-4">Manage your donor profile and requests.</p>
+<form method="post"><label class="form-label">Email</label><input class="form-control mb-3" type="email" name="email" required placeholder="you@example.com"><label class="form-label">Password</label><input class="form-control mb-4" type="password" name="password" required placeholder="Your password"><button class="btn btn-danger w-100 btn-lg">Log In</button></form>
+<p class="text-center mt-3 mb-0">New to LifeLine? <a href="{{ url_for('register') }}" class="text-danger fw-semibold">Create account</a></p></div></div>{% endblock %}

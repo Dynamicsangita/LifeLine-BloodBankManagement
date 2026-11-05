@@ -1,0 +1,72 @@
+<%- include('partials/header', { title: 'Blood Banks | LifeLine' }) %>
+<section class="wrap bank-hero">
+  <div class="bank-hero-copy"><span class="eyebrow">BLOOD BANK DIRECTORY</span><h1>Find a blood bank<br><span>near you.</span></h1><p>Search verified blood bank details in your area and contact them to confirm availability.</p>
+    <form class="bank-search-form" method="get" action="/blood-banks#directory">
+      <label class="sr-only" for="bank-city">Your location</label><span aria-hidden="true">⌖</span>
+      <input id="bank-city" name="city" maxlength="100" value="<%= city %>" placeholder="Enter your city or location">
+      <label class="sr-only" for="bank-blood-group">Filter by blood group</label>
+      <select id="bank-blood-group" name="bloodGroup">
+        <option value="">All blood groups</option>
+        <% bloodGroups.forEach((group) => { %><option value="<%= group %>" <%= selectedGroup === group ? 'selected' : '' %>><%= group %></option><% }) %>
+      </select>
+      <button class="button button-primary">Search</button>
+    </form>
+  </div>
+  <div class="bank-hero-art"><img src="/images/Modern%20Blood%20Bank%20Laboratory.png" alt="Blood bank staff member checking stored blood units in a modern laboratory" loading="lazy" decoding="async"></div>
+</section>
+
+<section class="wrap bank-results" id="directory">
+  <div class="section-heading">
+    <div><span class="eyebrow">LOCAL DIRECTORY</span><h2><%= city ? `Blood banks in ${city}` : 'Verified blood banks' %></h2><p>Only administrator-verified listings are shown. Call a bank to confirm current stock and hours.</p></div>
+    <a class="button button-outline bank-register-link" href="#register-bank">Register a blood bank</a>
+  </div>
+  <% if (banks.length) { %>
+    <div class="bank-grid">
+      <% banks.forEach((bank) => { const mapQuery = `${bank.name} ${bank.address} ${bank.city}`; %>
+        <article class="bank-card">
+          <div class="bank-card-heading"><span class="bank-card-mark" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 21h16M6 21V8l6-4 6 4v13M9 10h6M12 7v6M9 21v-5h6v5"/></svg></span><span class="verified-pill">✓ Verified</span></div>
+          <h3><%= bank.name %></h3>
+          <p class="bank-address"><span aria-hidden="true">⌖</span><span><%= bank.address %>, <%= bank.city %></span></p>
+          <% if (bank.phone) { %><p class="bank-meta"><span aria-hidden="true">☎</span><a href="tel:<%= bank.phone %>"><%= bank.phone %></a></p><% } %>
+          <% if (bank.openingHours) { %><p class="bank-meta"><span aria-hidden="true">◷</span><span><%= bank.openingHours %></span></p><% } %>
+          <div class="bank-groups">
+            <strong>Blood groups</strong>
+            <% if (bank.bloodGroups?.length) { %><div class="bank-group-tags"><% bank.bloodGroups.forEach((group) => { %><span><%= group %></span><% }) %></div><% } else { %><span class="bank-groups-unlisted">Not listed</span><% } %>
+            <small>Availability changes; contact the bank to confirm.</small>
+          </div>
+          <div class="bank-actions">
+            <% if (bank.phone) { %><a class="button button-primary" href="tel:<%= bank.phone %>">Call bank</a><% } else if (bank.email) { %><a class="button button-primary" href="mailto:<%= bank.email %>">Email bank</a><% } else { %><span class="button button-outline bank-no-contact" aria-disabled="true">Contact unavailable</span><% } %>
+            <details class="bank-details"><summary class="button button-outline">View details</summary><div class="bank-details-content"><strong>Full address</strong><p><%= bank.address %>, <%= bank.city %></p><% if (bank.email) { %><strong>Email</strong><p><a href="mailto:<%= bank.email %>"><%= bank.email %></a></p><% } %><a class="bank-directions" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query=<%= encodeURIComponent(mapQuery) %>">Find on map ↗</a></div></details>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="bank-empty"><div class="bank-empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 10h6M12 7v6M9 21v-5h6v5"/></svg></div><div class="bank-empty-content"><span class="eyebrow">DIRECTORY UPDATE</span><h3>No verified listings<%= city ? ` in ${city}` : ' yet' %><%= selectedGroup ? ` for ${selectedGroup}` : '' %></h3><p>We don't have a confirmed blood bank listing<%= city ? ` for ${city}` : '' %><%= selectedGroup ? ` listing ${selectedGroup}` : '' %> right now. Please contact a nearby hospital directly or search local donors.</p><div class="hero-actions"><a class="button button-primary" href="/donors">Find local donors</a><a class="button button-outline" href="#register-bank">Suggest a blood bank</a></div></div></div>
+  <% } %>
+</section>
+
+<section class="wrap bank-map-section" aria-labelledby="bank-map-heading">
+  <div class="bank-map-copy"><span class="eyebrow">EXPLORE THE AREA</span><h2 id="bank-map-heading"><%= city ? `Blood banks near ${city}` : 'Find blood banks on the map' %></h2><p>Use the map to explore locations. Confirm directions and availability with the bank before traveling.</p><a class="bank-map-open" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query=<%= encodeURIComponent(city ? `blood banks in ${city}` : 'blood banks near me') %>">Open map in Google Maps ↗</a></div>
+  <iframe class="bank-map-frame" title="Map showing blood banks <%= city ? `near ${city}` : 'near your area' %>" src="https://maps.google.com/maps?q=<%= encodeURIComponent(city ? `blood banks in ${city}` : 'blood banks near me') %>&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</section>
+
+<section class="wrap bank-register-section" id="register-bank">
+  <div class="bank-register-intro"><span class="eyebrow">JOIN THE DIRECTORY</span><h2>Register a blood bank</h2><p>Share your facility details to submit a listing. It will remain private until an administrator verifies it.</p><div class="bank-review-note"><strong>Verification matters</strong><span>Blood groups you provide are not published until your listing is reviewed. Always call to confirm current availability.</span></div></div>
+  <form class="form-card bank-register-form" method="post" action="/blood-banks/suggest">
+    <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
+    <div class="form-grid">
+      <label>Blood bank name<input name="name" maxlength="150" required autocomplete="organization"></label>
+      <label>City<input name="city" maxlength="100" required autocomplete="address-level2"></label>
+      <label class="form-span">Full address<input name="address" maxlength="255" required autocomplete="street-address"></label>
+      <label>Contact number<input name="phone" type="tel" maxlength="20" required autocomplete="tel"></label>
+      <label>Email (optional)<input name="email" type="email" maxlength="120" autocomplete="email"></label>
+      <label class="form-span">Opening hours (optional)<input name="openingHours" maxlength="200" placeholder="For example: Mon–Sat, 9 AM–5 PM"></label>
+      <fieldset class="bank-group-fieldset form-span"><legend>Blood groups available (optional; subject to verification)</legend><div class="bank-group-options"><% bloodGroups.forEach((group) => { %><label><input type="checkbox" name="bloodGroups" value="<%= group %>"><span><%= group %></span></label><% }) %></div></fieldset>
+      <div class="form-span bank-form-actions"><button class="button button-primary">Submit for verification</button><span>Submissions are not immediately listed publicly.</span></div>
+    </div>
+  </form>
+</section>
+
+<div class="wrap bank-disclaimer"><strong>Before you visit:</strong> Blood stock can change quickly. Call the blood bank to confirm current availability, eligibility requirements and opening hours. Blood group compatibility and availability should be confirmed by qualified medical professionals.</div>
+<%- include('partials/footer') %>

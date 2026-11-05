@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Blood Banks | LifeLine{% endblock %}
+{% block content %}
+<section class="page-heading mb-4">
+  <span class="eyebrow">LOCAL DIRECTORY</span>
+  <h1 class="section-title">Find a blood bank</h1>
+  <p class="text-secondary">Search verified blood-bank records and contact the bank directly to confirm stock and opening hours.</p>
+</section>
+<form class="row g-2 align-items-end mb-4" method="get" action="{{ url_for('blood_banks') }}">
+  <div class="col-sm-8 col-md-6">
+    <label class="form-label" for="bank-city">City</label>
+    <input class="form-control" id="bank-city" name="city" maxlength="100" value="{{ city }}" placeholder="Enter a city">
+  </div>
+  <div class="col-sm-auto"><button class="btn btn-danger" type="submit">Search</button></div>
+</form>
+<section class="dashboard-card">
+  <h2 class="h4 fw-bold mb-3">{{ 'Verified blood banks in ' ~ city if city else 'Verified blood banks' }}</h2>
+  {% if banks %}
+    <div class="row g-3">
+      {% for bank in banks %}
+        <div class="col-md-6 col-xl-4">
+          <article class="bank-card h-100">
+            <span class="badge text-bg-success mb-2">Verified</span>
+            <h3>{{ bank.name }}</h3>
+            <p>{{ bank.address }}</p>
+            <p class="mb-1">{{ bank.city }}</p>
+            {% if bank.phone %}<a class="btn btn-sm btn-outline-danger mt-2" href="tel:{{ bank.phone }}">Call {{ bank.phone }}</a>{% endif %}
+            {% if bank.email %}<a class="btn btn-sm btn-outline-danger mt-2" href="mailto:{{ bank.email }}">Email</a>{% endif %}
+          </article>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-secondary mb-0">No verified blood-bank records{% if city %} found for {{ city }}{% endif %}. Please check back later or contact a nearby hospital directly.</p>
+  {% endif %}
+</section>
+<p class="alert alert-warning mt-3 mb-0"><strong>Before visiting:</strong> Confirm current stock and opening hours directly with the blood bank.</p>
+{% endblock %}

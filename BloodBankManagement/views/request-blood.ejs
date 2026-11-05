@@ -1,0 +1,31 @@
+<%- include('partials/header', { title: 'Request Blood | LifeLine' }) %>
+<section class="wrap page-heading request-page-heading">
+  <span class="eyebrow">BLOOD REQUEST</span>
+  <h1>Request blood</h1>
+  <p>Need blood? We're here to help. Share the details and our network can help you connect.</p>
+</section>
+<% if (canSubmit) { %>
+  <div class="wrap request-layout">
+    <form method="post" action="/request-blood" class="form-card request-form">
+      <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
+      <label>Blood group<select name="bloodGroup" required><option value="">Select blood group</option><% bloodGroups.forEach((group) => { %><option value="<%= group %>"><%= group %></option><% }) %></select></label>
+      <label>Reason / urgency<select name="urgency" required><option value="">Select urgency</option><option value="Normal">Normal</option><option value="Urgent">Urgent</option><option value="Emergency">Emergency</option></select></label>
+      <label>Patient name<input name="patientName" maxlength="100" required placeholder="Patient's full name"></label>
+      <label>Units required<input type="number" name="units" min="1" max="20" required placeholder="Number of units"></label>
+      <label>Hospital / medical facility<input name="hospital" maxlength="150" required placeholder="Hospital name"></label>
+      <label>Location / city<input name="city" maxlength="100" required placeholder="Hospital city"></label>
+      <label>Contact phone<input name="contactPhone" maxlength="20" type="tel" required placeholder="Reachable contact number"></label>
+      <label>Additional message <small class="field-hint">Optional</small><textarea name="message" rows="3" maxlength="500" placeholder="Share any helpful details"></textarea></label>
+      <button class="button button-primary button-large request-submit">Submit request</button>
+      <p class="form-privacy">Your request will be reviewed by the LifeLine blood bank team.</p>
+    </form>
+    <aside class="request-art-panel">
+      <img class="page-photo" src="/images/blood-request.jpg" alt="Patient receiving care in a hospital" loading="lazy" decoding="async">
+      <div class="request-art-copy"><span class="eyebrow">WE'RE HERE TO HELP</span><h2>A community ready to help.</h2><p>Provide accurate hospital and contact details so the team can follow up on your request.</p><a href="/blood-banks">Find a blood bank near you →</a></div>
+    </aside>
+  </div>
+<% } else { %>
+  <section class="wrap request-gate"><div class="request-gate-art"><img class="page-photo" src="/images/blood-request.jpg" alt="Patient receiving care in a hospital" loading="lazy" decoding="async"></div><div class="request-gate-copy"><span class="eyebrow">YOUR REQUEST. YOUR DASHBOARD.</span><h2>Sign in to submit a blood request</h2><p>Log in or create an account to send your request and follow updates from your dashboard.</p><div class="hero-actions"><a class="button button-primary" href="/login">Log in</a><a class="button button-outline" href="/signup">Create account</a></div><a class="text-link" href="/donors">Looking for a donor? Search available donors →</a></div></section>
+<% } %>
+<div class="wrap alert-note"><strong>For emergencies:</strong> Contact the hospital or blood bank directly. This website is a coordination aid and does not guarantee availability or clinical compatibility.</div>
+<%- include('partials/footer') %>
